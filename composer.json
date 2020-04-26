@@ -1,6 +1,6 @@
 {
   "name": "setbased/club-collect-api-client",
-  "description": "A Client for ClubCollect API in PHP",
+  "description": "A ClubCollect API Client",
   "keywords": [
     "club-collect",
     "client",
