@@ -1,0 +1,37 @@
+{
+  "name": "setbased/club-collect-api-client",
+  "description": "A Client for ClubCollect API in PHP",
+  "keywords": [
+    "club-collect",
+    "client",
+    "api"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=7.3",
+    "ext-json": "*",
+    "composer/ca-bundle": "^1.2",
+    "guzzlehttp/guzzle": "^6.5",
+    "setbased/exception": "^2.1",
+    "setbased/helper-cast": "^2.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.0",
+    "phing/phing": "^2.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "SetBased\\ClubCollect\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "SetBased\\ClubCollect\\Test\\": "test/"
+    }
+  },
+  "config": {
+    "bin-dir": "bin/",
+    "sort-packages": true
+  }
+}

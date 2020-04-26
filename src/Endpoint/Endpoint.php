@@ -1,0 +1,150 @@
+<?php
+declare(strict_types=1);
+
+namespace SetBased\ClubCollect\Endpoint;
+
+use SetBased\ClubCollect\ClubCollectApiClient;
+use SetBased\ClubCollect\Exception\ClubCollectApiException;
+use SetBased\ClubCollect\Resource\BaseResource;
+
+/**
+ * Abstract parent class for all end points.
+ */
+abstract class Endpoint
+{
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * The ClubCollect API client.
+   *
+   * @var ClubCollectApiClient
+   */
+  protected $client;
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Object constructor.
+   *
+   * @param ClubCollectApiClient $client The ClubCollect API client.
+   */
+  public function __construct(ClubCollectApiClient $client)
+  {
+    $this->client = $client;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Get the object that is used by this API endpoint. Every API endpoint uses one type of object.
+   *
+   * @param array $response The response from the API.
+   *
+   * @return BaseResource
+   */
+  abstract protected function getResourceObject(array $response);
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Creates a single object from the REST API.
+   *
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   * @param array|null $body  The body parameters. A map from key to value.
+   *
+   * @return BaseResource
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restCreate(array $path, ?array $query = null, ?array $body = null)
+  {
+    $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_POST, $path, $query, $body);
+
+    return $this->getResourceObject($result);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Sends a DELETE request for a single object to the REST API.
+   *
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restDelete(array $path, ?array $query = null): void
+  {
+    $this->client->performHttpCall(ClubCollectApiClient::HTTP_DELETE, $path, $query);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Retrieves a list of objects from the REST API.
+   *
+   * @param int|null   $from  The first page.
+   * @param int|null   $to    The last page.
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   *
+   * @return array
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restList(?int $from, ?int $to, array $path, ?array $query = null): array
+  {
+    $list = [];
+    $page = $from ?? 0;
+    do
+    {
+      ++$page;
+
+      $query['page_number'] = $page;
+      $result               = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+
+      foreach ($result['imports'] as $import)
+      {
+        $list[] = $this->getResourceObject($import);
+      }
+    } while ($page<($to ?? $result['page']['total_pages']));
+
+    return $list;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Updates a single object on the REST API.
+   *
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   * @param array|null $body  The body parameters. A map from key to value.
+   *
+   * @return BaseResource The update resource.
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restPut(array $path, ?array $query = null, ?array $body = null)
+  {
+    $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_PUT, $path, $query, $body);
+
+    return $this->getResourceObject($result);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Retrieves a single object from the REST API.
+   *
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   *
+   * @return BaseResource
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restRead(array $path, ?array $query = null)
+  {
+    $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+
+    return $this->getResourceObject($result);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+}
+
+//----------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,12 @@
+/.idea
+/.phpunit.result.cache
+/api-key.txt
+/company-id.txt
+/bin/phing
+/bin/phpunit
+/composer.lock
+/custom.task.properties
+/custom.type.properties
+/test/coverage.xml
+/test/report/
+/vendor/
