@@ -97,6 +97,29 @@ class ImportEndpoint extends Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Instructs ClubCollect to transmit the Import, initiating the invoice collection process.
+   *
+   * @param string $id The ID (supplied by ClubCollect) of the import.
+   *
+   * @return Import
+   *
+   * @throws ClubCollectApiException
+   */
+  public function transmit(string $id): Import
+  {
+    /** @var Import $resource */
+    $resource = parent::restPut(['imports', $id, 'transmit'],
+                                ['api_key' => $this->client->getApiKey()]);
+    if (!is_a($resource, Import::class))
+    {
+      throw new ClubCollectApiException('Expected an Import object, got a %s', get_class($resource));
+    }
+
+    return $resource;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Updates an import.
    *
    * @param string   $id                      The ID (supplied by ClubCollect) of the import.

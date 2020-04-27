@@ -48,6 +48,53 @@ class ImportEndpointTest extends TestCase
   }
 
   //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Test transmitting an Import.
+   *
+   * @throws \Exception
+   */
+  public function testTransmit(): void
+  {
+    $apiKey    = trim(file_get_contents(__DIR__.'/../api-key.txt'));
+    $companyId = trim(file_get_contents(__DIR__.'/../company-id.txt'));
+
+    $title = bin2hex(random_bytes(16));
+    $api   = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId);
+
+    // Create.
+    $import1 = $api->import->create($title, 1);
+    self::assertFalse($import1->isTransmitted());
+
+    // Add an invoice
+    $api->invoice->create($import1->importId,
+                          '123456',
+                          null,
+                          null,
+                          null,
+                          null,
+                          'NL',
+                          ['first_name' => 'John',
+                           'last_name'  => 'Doe'],
+                          ['address1'     => 'Some Street',
+                           'house_number' => '1',
+                           'zip-code'     => '1000',
+                           'city'         => 'A Big One',
+                           'country_code' => 'NL'],
+                          ['email_address' => 'noreply@setbased.nl'],
+                          ['phone_number' => '+31-6-12345678',
+                           'country_code' => 'NL'],
+                          [['amount_cents' => 5000,
+                            'description'  => 'Contribution'],
+                           ['amount_cents' => 500,
+                            'description'  => 'Extra Contribution']],
+                          5500);
+
+    // Transmit.
+    $import2 = $api->import->transmit($import1->importId);
+    self::assertTrue($import2->isTransmitted());
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
 }
 
 //----------------------------------------------------------------------------------------------------------------------
