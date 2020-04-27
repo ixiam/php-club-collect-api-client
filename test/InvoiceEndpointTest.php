@@ -154,7 +154,7 @@ class InvoiceEndpointTest extends TestCase
     self::assertNotNull($invoice1->invoiceId);
 
     // Read
-    $invoice2 = $api->invoice->get($invoice1->invoiceId);
+    $invoice2 = $api->invoice->fetch($invoice1->invoiceId);
     self::assertEquals($invoice1, $invoice2);
 
     // Update
@@ -185,7 +185,7 @@ class InvoiceEndpointTest extends TestCase
     $api->invoice->delete($invoice1->invoiceId);
 
     $this->expectException(ClubCollectApiException::class);
-    $api->invoice->get($invoice1->invoiceId);
+    $api->invoice->fetch($invoice1->invoiceId);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

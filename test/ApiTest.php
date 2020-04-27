@@ -50,7 +50,7 @@ class ApiTest extends TestCase
     $api = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId);
     self::assertSame(ClubCollectApiClient::class, get_class($api));
     $this->expectException(ClubCollectApiException::class);
-    $api->company->get();
+    $api->company->fetch();
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ class ApiTest extends TestCase
     $api = new ClubCollectApiClient('https://sandbox.clubcollect.comx/api', $apiKey, $companyId);
     self::assertSame(ClubCollectApiClient::class, get_class($api));
     $this->expectException(ClubCollectApiException::class);
-    $api->company->get();
+    $api->company->fetch();
   }
 
   //--------------------------------------------------------------------------------------------------------------------

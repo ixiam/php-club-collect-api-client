@@ -14,13 +14,13 @@ class CompanyEndpoint extends Endpoint
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Retrieves the company from ClubCollect.
+   * Fetches the company from ClubCollect.
    *
    * @return Company
    *
    * @throws ClubCollectApiException
    */
-  public function get(): Company
+  public function fetch(): Company
   {
     /** @var Company $resource */
     $resource = parent::restRead(['companies', $this->client->getCompanyId()],

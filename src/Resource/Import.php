@@ -25,8 +25,8 @@ class Import extends BaseResource
 
   /**
    * The invoice numbers of the invoices that imported under this Import. When this Import is retrieved with
-   * ImportEndpoint::get() the value will an array which might be empty. However, when this import is retrieved with
-   * ImportEndpoint::page() the value will be null even when there are invoices under the import.
+   * ImportEndpoint::fetch() the value will an array which might be empty. However, when this import is retrieved with
+   * ImportEndpoint::fetchAll() the value will be null even when there are invoices under the import.
    *
    * @var string[]|null
    */

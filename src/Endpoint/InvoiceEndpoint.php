@@ -175,7 +175,7 @@ class InvoiceEndpoint extends Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Retrieves an invoice from ClubCollect.
+   * Fetches an invoice from ClubCollect.
    *
    * @param string $invoiceId The invoice ID, supplied by ClubCollect.
    *
@@ -183,7 +183,7 @@ class InvoiceEndpoint extends Endpoint
    *
    * @throws ClubCollectApiException
    */
-  public function get(string $invoiceId): Invoice
+  public function fetch(string $invoiceId): Invoice
   {
     /** @var Invoice $resource */
     $resource = parent::restRead(['invoices', $invoiceId],

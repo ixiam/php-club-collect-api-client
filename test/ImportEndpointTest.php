@@ -33,7 +33,7 @@ class ImportEndpointTest extends TestCase
     self::assertFalse($import1->isTransmitted());
 
     // Read.
-    $import2 = $api->import->get($import1->importId);
+    $import2 = $api->import->fetch($import1->importId);
     self::assertEquals($import1, $import2);
 
     // Update.
@@ -44,7 +44,7 @@ class ImportEndpointTest extends TestCase
     $api->import->delete($import1->importId);
 
     $this->expectException(ClubCollectApiException::class);
-    $api->import->get($import1->importId);
+    $api->import->fetch($import1->importId);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

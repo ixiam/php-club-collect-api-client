@@ -15,7 +15,7 @@ class CompanyTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test get a company.
+   * Test fetch a company.
    *
    * @throws \Exception
    */
@@ -25,7 +25,7 @@ class CompanyTest extends TestCase
     $companyId = trim(file_get_contents(__DIR__.'/../company-id.txt'));
 
     $api     = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId);
-    $company = $api->company->get();
+    $company = $api->company->fetch();
 
     self::assertSame(Company::class, get_class($company));
     self::assertSame($companyId, $company->companyId);
@@ -33,7 +33,7 @@ class CompanyTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test get a company with wrong key.
+   * Test fetch a company with wrong key.
    *
    * @throws \Exception
    */
@@ -44,7 +44,7 @@ class CompanyTest extends TestCase
 
     $this->expectException(ClubCollectApiException::class);
     $api = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId.'a');
-    $api->company->get();
+    $api->company->fetch();
   }
 
   //--------------------------------------------------------------------------------------------------------------------

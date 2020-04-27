@@ -31,8 +31,8 @@ class ImportEndpoint extends Endpoint
     $resource = parent::restPost(['imports'],
                                  ['api_key' => $this->client->getApiKey()],
                                  ['title'                   => $title,
-                                    'company_id'              => $this->client->getCompanyId(),
-                                    'expected_invoices_count' => $expectedInvoiceCount]);
+                                  'company_id'              => $this->client->getCompanyId(),
+                                  'expected_invoices_count' => $expectedInvoiceCount]);
     if (!is_a($resource, Import::class))
     {
       throw new ClubCollectApiException('Expected an Import object, got a %s', get_class($resource));
@@ -56,7 +56,7 @@ class ImportEndpoint extends Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Retrieves an import from ClubCollect.
+   * Fetches an import from ClubCollect.
    *
    * @param string $importId The ID (supplied by ClubCollect) of the import.
    *
@@ -64,7 +64,7 @@ class ImportEndpoint extends Endpoint
    *
    * @throws ClubCollectApiException
    */
-  public function get(string $importId): Import
+  public function fetch(string $importId): Import
   {
     /** @var Import $resource */
     $resource = parent::restRead(['imports', $importId], ['api_key' => $this->client->getApiKey()]);
@@ -78,16 +78,16 @@ class ImportEndpoint extends Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Returns a list of imports.
+   * Fetches a list of imports.
    *
-   * @param int|null $from The first page.
-   * @param int|null $to   The last page.
+   * @param int|null $from The first fetchAll.
+   * @param int|null $to   The last fetchAll.
    *
    * @return Import[]
    *
    * @throws ClubCollectApiException
    */
-  public function page(?int $from = null, ?int $to = null): array
+  public function fetchAll(?int $from = null, ?int $to = null): array
   {
     return parent::restList($from,
                             $to,
