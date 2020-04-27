@@ -16,6 +16,8 @@ class CompanyTest extends TestCase
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test get a company.
+   *
+   * @throws \Exception
    */
   public function testGet(): void
   {
@@ -32,6 +34,8 @@ class CompanyTest extends TestCase
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test get a company with wrong key.
+   *
+   * @throws \Exception
    */
   public function testGetInvalid(): void
   {

@@ -16,6 +16,8 @@ class ImportEndpointTest extends TestCase
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Test CRUD an Import.
+   *
+   * @throws \Exception
    */
   public function testCrud(): void
   {

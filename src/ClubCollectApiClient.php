@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SetBased\ClubCollect\Endpoint\CompanyEndpoint;
 use SetBased\ClubCollect\Endpoint\ImportEndpoint;
+use SetBased\ClubCollect\Endpoint\InvoiceEndpoint;
 use SetBased\ClubCollect\Exception\ClubCollectApiException;
 use SetBased\ClubCollect\Helper\Cast;
 
@@ -70,6 +71,13 @@ class ClubCollectApiClient
    * @var ImportEndpoint
    */
   public $import;
+
+  /**
+   * RESTFul invoice endpoint.
+   *
+   * @var InvoiceEndpoint
+   */
+  public $invoice;
 
   /**
    * Endpoint of the remote API.
@@ -314,6 +322,7 @@ class ClubCollectApiClient
   {
     $this->company = new CompanyEndpoint($this);
     $this->import  = new ImportEndpoint($this);
+    $this->invoice = new InvoiceEndpoint($this);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

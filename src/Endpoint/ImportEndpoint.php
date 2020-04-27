@@ -28,9 +28,9 @@ class ImportEndpoint extends Endpoint
   public function create(?string $title = null, ?int $expectedInvoiceCount = null): Import
   {
     /** @var Import $resource */
-    $resource = parent::restCreate(['imports'],
-                                   ['api_key' => $this->client->getApiKey()],
-                                   ['title'                   => $title,
+    $resource = parent::restPost(['imports'],
+                                 ['api_key' => $this->client->getApiKey()],
+                                 ['title'                   => $title,
                                     'company_id'              => $this->client->getCompanyId(),
                                     'expected_invoices_count' => $expectedInvoiceCount]);
     if (!is_a($resource, Import::class))
@@ -58,16 +58,16 @@ class ImportEndpoint extends Endpoint
   /**
    * Retrieves an import from ClubCollect.
    *
-   * @param string $id The ID (supplied by ClubCollect) of the import.
+   * @param string $importId The ID (supplied by ClubCollect) of the import.
    *
    * @return Import
    *
    * @throws ClubCollectApiException
    */
-  public function get(string $id): Import
+  public function get(string $importId): Import
   {
     /** @var Import $resource */
-    $resource = parent::restRead(['imports', $id], ['api_key' => $this->client->getApiKey()]);
+    $resource = parent::restRead(['imports', $importId], ['api_key' => $this->client->getApiKey()]);
     if (!is_a($resource, Import::class))
     {
       throw new ClubCollectApiException('Expected an Import object, got a %s', get_class($resource));

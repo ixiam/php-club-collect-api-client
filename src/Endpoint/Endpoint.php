@@ -43,7 +43,7 @@ abstract class Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Creates a single object from the REST API.
+   * Creates or updates a single object from the REST API.
    *
    * @param array      $path  The parts of the path.
    * @param array|null $query The query parameters. A map from key to value.
@@ -53,7 +53,7 @@ abstract class Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function restCreate(array $path, ?array $query = null, ?array $body = null)
+  protected function restPost(array $path, ?array $query = null, ?array $body = null)
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_POST, $path, $query, $body);
 

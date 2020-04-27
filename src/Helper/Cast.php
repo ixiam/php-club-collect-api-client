@@ -56,6 +56,24 @@ class Cast extends \SetBased\Helper\Cast
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Converts a value to a DateTime. If the value can not be safely casted to a DateTime throws an exception.
+   *
+   * @param mixed       $value   The value.
+   * @param string|null $default The default value. If the value is null the default value will be returned.
+   *
+   * @return \DateTime
+   *
+   * @throws \Exception
+   */
+  public static function toManDateTime($value, ?string $default = null): ?\DateTime
+  {
+    $epoch = static::toManString($value, $default);
+
+    return new \DateTime($epoch);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Converts a value to a string. If the value can not be safely casted to a string throws an exception.
    *
    * @param mixed       $value   The value.
