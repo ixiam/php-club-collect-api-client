@@ -145,7 +145,7 @@ class Invoice extends BaseResource
 
       foreach ($response['tickets'] as $line)
       {
-        $this->tickets[] = new Ticket($client, $line);
+        $this->tickets[] = new Ticket($client, $line, $this->invoiceId);
       }
     }
     catch (\Throwable $exception)

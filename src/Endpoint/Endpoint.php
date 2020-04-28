@@ -66,7 +66,7 @@ abstract class Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function restGet(array $path, ?array $query = null)
+  protected function restGet(array $path, ?array $query = null): BaseResource
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
 
@@ -77,6 +77,31 @@ abstract class Endpoint
   /**
    * Retrieves a list of objects from the REST API.
    *
+   * @param string     $key   The key of the objects in the response.
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   *
+   * @return array
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restGetList(string $key, array $path, ?array $query = null): array
+  {
+    $list   = [];
+    $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+    foreach ($result[$key] as $import)
+    {
+      $list[] = $this->createResourceObject($import);
+    }
+
+    return $list;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Retrieves a list of objects from the REST API.
+   *
+   * @param string     $key   The key of the objects in the response.
    * @param int|null   $from  The first page.
    * @param int|null   $to    The last page.
    * @param array      $path  The parts of the path.
@@ -86,7 +111,7 @@ abstract class Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function restGetPages(?int $from, ?int $to, array $path, ?array $query = null): array
+  protected function restGetPages(string $key, ?int $from, ?int $to, array $path, ?array $query = null): array
   {
     $list = [];
     $page = $from ?? 0;
@@ -97,7 +122,7 @@ abstract class Endpoint
       $query['page_number'] = $page;
       $result               = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
 
-      foreach ($result['imports'] as $import)
+      foreach ($result[$key] as $import)
       {
         $list[] = $this->createResourceObject($import);
       }
@@ -114,13 +139,15 @@ abstract class Endpoint
    * @param array|null $query The query parameters. A map from key to value.
    * @param array|null $body  The body parameters. A map from key to value.
    *
-   * @return BaseResource
+   * @return BaseResource|null
    *
    * @throws ClubCollectApiException
    */
-  protected function restPost(array $path, ?array $query = null, ?array $body = null)
+  protected function restPost(array $path, ?array $query = null, ?array $body = null): ?BaseResource
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_POST, $path, $query, $body);
+
+    if ($result===null) return null;
 
     return $this->createResourceObject($result);
   }
@@ -137,7 +164,7 @@ abstract class Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function restPut(array $path, ?array $query = null, ?array $body = null)
+  protected function restPut(array $path, ?array $query = null, ?array $body = null): BaseResource
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_PUT, $path, $query, $body);
 

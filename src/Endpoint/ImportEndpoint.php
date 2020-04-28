@@ -89,7 +89,8 @@ class ImportEndpoint extends Endpoint
    */
   public function fetchAll(?int $from = null, ?int $to = null): array
   {
-    return parent::restGetPages($from,
+    return parent::restGetPages('imports',
+                                $from,
                                 $to,
                                 ['companies', $this->client->getCompanyId(), 'imports'],
                                 ['api_key' => $this->client->getApiKey()]);

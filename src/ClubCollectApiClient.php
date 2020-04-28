@@ -14,6 +14,7 @@ use Psr\Http\Message\StreamInterface;
 use SetBased\ClubCollect\Endpoint\CompanyEndpoint;
 use SetBased\ClubCollect\Endpoint\ImportEndpoint;
 use SetBased\ClubCollect\Endpoint\InvoiceEndpoint;
+use SetBased\ClubCollect\Endpoint\TicketEndpoint;
 use SetBased\ClubCollect\Exception\ClubCollectApiException;
 use SetBased\ClubCollect\Helper\Cast;
 
@@ -78,6 +79,13 @@ class ClubCollectApiClient
    * @var InvoiceEndpoint
    */
   public $invoice;
+
+  /**
+   * RESTFul ticket endpoint.
+   *
+   * @var TicketEndpoint
+   */
+  public $ticket;
 
   /**
    * Endpoint of the remote API.
@@ -160,14 +168,14 @@ class ClubCollectApiClient
    * @param array|null $query      The query parameters. A map from key to value.
    * @param array|null $body       The body parameters. A map from key to value.
    *
-   * @return array
+   * @return array|null
    *
    * @throws ClubCollectApiException
    */
   public function performHttpCall(string $httpMethod,
                                   array $path,
                                   ?array $query = null,
-                                  ?array $body = null)
+                                  ?array $body = null): ?array
   {
     $url = sprintf('%s/%s%s%s',
                    $this->apiEndpoint,
@@ -323,6 +331,7 @@ class ClubCollectApiClient
     $this->company = new CompanyEndpoint($this);
     $this->import  = new ImportEndpoint($this);
     $this->invoice = new InvoiceEndpoint($this);
+    $this->ticket  = new TicketEndpoint($this);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

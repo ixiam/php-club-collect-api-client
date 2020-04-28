@@ -21,6 +21,11 @@ class Ticket extends BaseResource
   /**
    * @var string
    */
+  public $invoiceId;
+
+  /**
+   * @var string
+   */
   public $message;
 
   /**
@@ -37,21 +42,23 @@ class Ticket extends BaseResource
   /**
    * Object constructor.
    *
-   * @param ClubCollectApiClient $client   The API client.
-   * @param array                $response The API response.
+   * @param ClubCollectApiClient $client    The API client.
+   * @param array                $response  The API response.
+   * @param string|null          $invoiceId The Id of the current invoice for which we are manipulating tickets
    *
    * @throws ClubCollectApiException
    */
-  public function __construct(ClubCollectApiClient $client, array $response)
+  public function __construct(ClubCollectApiClient $client, array $response, ?string $invoiceId)
   {
     parent::__construct($client);
 
     try
     {
-      $this->date     = Cast::toManDateTime($response['date']);
-      $this->message  = Cast::toManString($response['message']);
-      $this->sender   = Cast::toManString($response['sender']);
-      $this->ticketId = Cast::toManString($response['ticket_id']);
+      $this->date      = Cast::toManDateTime($response['date']);
+      $this->invoiceId = Cast::toOptString($response['invoice_id'] ?? null, $invoiceId);
+      $this->message   = Cast::toManString($response['message']);
+      $this->sender    = Cast::toManString($response['sender']);
+      $this->ticketId  = Cast::toManString($response['ticket_id']);
     }
     catch (\Throwable $exception)
     {
