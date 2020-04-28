@@ -110,6 +110,32 @@ abstract class Endpoint
   /**
    * Retrieves a list of objects from the REST API.
    *
+   * @param array      $path  The parts of the path.
+   * @param array|null $query The query parameters. A map from key to value.
+   *
+   * @return array
+   *
+   * @throws ClubCollectApiException
+   */
+  protected function restGetPageInfo(array $path, ?array $query = null): array
+  {
+    $query['page_number'] = 1;
+    $result               = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+    if ($result===null)
+    {
+      throw new ClubCollectApiException('Null response received from ClubCollect');
+    }
+
+    $info = $result['page'];
+    unset($info['page_number']);
+
+    return $info;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Retrieves a list of objects from the REST API.
+   *
    * @param string     $key   The key of the objects in the response.
    * @param int|null   $from  The first page.
    * @param int|null   $to    The last page.

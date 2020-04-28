@@ -49,6 +49,37 @@ class ImportEndpointTest extends TestCase
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Test fetch all imports.
+   *
+   * @throws \Exception
+   */
+  public function testFetchAll(): void
+  {
+    $apiKey    = trim(file_get_contents(__DIR__.'/../api-key.txt'));
+    $companyId = trim(file_get_contents(__DIR__.'/../company-id.txt'));
+
+    $title = bin2hex(random_bytes(16));
+    $api   = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId);
+
+    // Create.
+    $import1 = $api->import->create($title.'-1');
+    $import2 = $api->import->create($title.'-2');
+
+    // Fetch all imports.
+    $imports = $api->import->fetchAll();
+    self::assertGreaterThanOrEqual(2, count($imports));
+
+    // Fetch info
+    $info = $api->import->fetchPageInfo();
+    self::assertArrayHasKey('total_pages', $info);
+
+    // Cleanup
+    $api->import->delete($import1->importId);
+    $api->import->delete($import2->importId);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Test transmitting an Import.
    *
    * @throws \Exception

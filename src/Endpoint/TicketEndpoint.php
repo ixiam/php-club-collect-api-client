@@ -109,8 +109,8 @@ class TicketEndpoint extends Endpoint
    *                         <li> answered
    *                         <li> archived
    *                         </ul>
-   * @param int|null $from   The first fetchAll.
-   * @param int|null $to     The last fetchAll.
+   * @param int|null $from   The first to fetch. Defaults to the first page.
+   * @param int|null $to     The last to fetch. Defaults to the last page.
    *
    * @return Ticket[]
    *
@@ -125,6 +125,27 @@ class TicketEndpoint extends Endpoint
                                 $to,
                                 ['companies', $this->client->getCompanyId(), 'tickets', $status],
                                 ['api_key' => $this->client->getApiKey()]);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Fetches info about available pages.
+   *
+   * @param string   $status The status of the ticket. One of
+   *                         <ul>
+   *                         <li> unanswered
+   *                         <li> answered
+   *                         <li> archived
+   *                         </ul>
+   *
+   * @return array Has the following keys: page_size, total_entries, total_pages.
+   *
+   * @throws ClubCollectApiException
+   */
+  public function fetchPageInfo(string $status): array
+  {
+    return parent::restGetPageInfo(['companies', $this->client->getCompanyId(), 'tickets', $status],
+                                   ['api_key' => $this->client->getApiKey()]);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

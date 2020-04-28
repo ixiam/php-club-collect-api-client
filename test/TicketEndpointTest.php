@@ -78,6 +78,12 @@ class TicketEndpointTest extends TestCase
     }
     self::assertNotNull($key);
     self::assertSame($invoice->invoiceId, $tickets2[$key]->invoiceId);
+
+    // Fetch page info.
+    $info = $api->ticket->fetchPageInfo('archived');
+    self::assertArrayHasKey('page_size', $info);
+    self::assertArrayHasKey('total_entries', $info);
+    self::assertArrayHasKey('total_pages', $info);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

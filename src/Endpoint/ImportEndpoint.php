@@ -80,8 +80,8 @@ class ImportEndpoint extends Endpoint
   /**
    * Fetches a list of imports.
    *
-   * @param int|null $from The first fetchAll.
-   * @param int|null $to   The last fetchAll.
+   * @param int|null $from The first to fetch. Defaults to the first page.
+   * @param int|null $to   The last to fetch. Defaults to the last page.
    *
    * @return Import[]
    *
@@ -94,6 +94,20 @@ class ImportEndpoint extends Endpoint
                                 $to,
                                 ['companies', $this->client->getCompanyId(), 'imports'],
                                 ['api_key' => $this->client->getApiKey()]);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Fetches info about available pages.
+   *
+   * @return array Has the following keys: total_pages.
+   *
+   * @throws ClubCollectApiException
+   */
+  public function fetchPageInfo(): array
+  {
+    return parent::restGetPageInfo(['companies', $this->client->getCompanyId(), 'imports'],
+                                   ['api_key' => $this->client->getApiKey()]);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
