@@ -69,6 +69,10 @@ abstract class Endpoint
   protected function restGet(array $path, ?array $query = null): BaseResource
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+    if ($result===null)
+    {
+      throw new ClubCollectApiException('Null response received from ClubCollect');
+    }
 
     return $this->createResourceObject($result);
   }
@@ -89,6 +93,11 @@ abstract class Endpoint
   {
     $list   = [];
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+    if ($result===null)
+    {
+      throw new ClubCollectApiException('Null response received from ClubCollect');
+    }
+
     foreach ($result[$key] as $import)
     {
       $list[] = $this->createResourceObject($import);
@@ -121,6 +130,10 @@ abstract class Endpoint
 
       $query['page_number'] = $page;
       $result               = $this->client->performHttpCall(ClubCollectApiClient::HTTP_GET, $path, $query);
+      if ($result===null)
+      {
+        throw new ClubCollectApiException('Null response received from ClubCollect');
+      }
 
       foreach ($result[$key] as $import)
       {
@@ -167,6 +180,10 @@ abstract class Endpoint
   protected function restPut(array $path, ?array $query = null, ?array $body = null): BaseResource
   {
     $result = $this->client->performHttpCall(ClubCollectApiClient::HTTP_PUT, $path, $query, $body);
+    if ($result===null)
+    {
+      throw new ClubCollectApiException('Null response received from ClubCollect');
+    }
 
     return $this->createResourceObject($result);
   }
