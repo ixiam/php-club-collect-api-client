@@ -182,7 +182,7 @@ class ClubCollectApiClient
                    $this->apiEndpoint,
                    self::API_VERSION,
                    $this->composePath($path),
-                   $this->composerQuery($query));
+                   $this->composeQuery($query));
 
     return $this->performHttpCallToFullUrl($httpMethod, $url, $this->composeRequestBody($body));
   }
@@ -306,7 +306,7 @@ class ClubCollectApiClient
    *
    * @return string
    */
-  private function composerQuery(?array $query): string
+  private function composeQuery(?array $query): string
   {
     if (empty($query)) return '';
 
