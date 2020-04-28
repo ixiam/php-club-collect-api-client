@@ -9,6 +9,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
+use Plaisio\Helper\Url;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
 use SetBased\ClubCollect\Endpoint\CompanyEndpoint;
@@ -219,6 +220,28 @@ class ClubCollectApiClient
     }
 
     return $this->parseResponseBody($response);
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Returns the URL for ClubCollect Treasurer SSO login.
+   *
+   * @param string $salt The salt (provided by ClubCollect).
+   * @param string $key  The key (provided by ClubCollect).
+   *
+   * @return string
+   */
+  public function ssoUrlTreasurer(string $salt, string $key)
+  {
+    $hash = hash('sha256', sprintf('%s%s%s%s', date('Ymd'), $this->getCompanyId(), $salt, $key));
+
+    $parts          = parse_url($this->apiEndpoint);
+    $parts['path']  = '/treasurer/sso';
+    $parts['query'] = http_build_query(['company_uuid' => $this->companyId,
+                                        'signature'    => $hash]);
+    unset($parts['fragment']);
+
+    return Url::unParseUrl($parts);
   }
 
   //--------------------------------------------------------------------------------------------------------------------

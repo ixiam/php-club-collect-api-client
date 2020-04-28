@@ -13,6 +13,7 @@
     "ext-json": "*",
     "composer/ca-bundle": "^1.2",
     "guzzlehttp/guzzle": "^6.5",
+    "plaisio/helper-url": "^1.1",
     "setbased/exception": "^2.1",
     "setbased/helper-cast": "^2.1"
   },
