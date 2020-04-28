@@ -310,29 +310,7 @@ class ClubCollectApiClient
   {
     if (empty($query)) return '';
 
-    $uri   = '';
-    $first = true;
-    foreach ($query as $key => $value)
-    {
-      if ($value!==null)
-      {
-        if ($first)
-        {
-          $uri   .= '?';
-          $first = false;
-        }
-        else
-        {
-          $uri .= '&';
-        }
-
-        $uri .= urlencode($key);
-        $uri .= '=';
-        $uri .= urlencode(Cast::toManString($value));
-      }
-    }
-
-    return $uri;
+    return '?'.http_build_query($query);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
