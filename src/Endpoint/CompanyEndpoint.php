@@ -23,8 +23,8 @@ class CompanyEndpoint extends Endpoint
   public function fetch(): Company
   {
     /** @var Company $resource */
-    $resource = parent::restRead(['companies', $this->client->getCompanyId()],
-                                 ['api_key' => $this->client->getApiKey()]);
+    $resource = parent::restGet(['companies', $this->client->getCompanyId()],
+                                ['api_key' => $this->client->getApiKey()]);
     if (!is_a($resource, Company::class))
     {
       throw new ClubCollectApiException('Expected a Company object, got a %s', get_class($resource));
@@ -43,7 +43,7 @@ class CompanyEndpoint extends Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function getResourceObject(array $response): BaseResource
+  protected function createResourceObject(array $response): BaseResource
   {
     return new Company($this->client, $response);
   }

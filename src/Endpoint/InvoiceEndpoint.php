@@ -186,8 +186,8 @@ class InvoiceEndpoint extends Endpoint
   public function fetch(string $invoiceId): Invoice
   {
     /** @var Invoice $resource */
-    $resource = parent::restRead(['invoices', $invoiceId],
-                                 ['api_key' => $this->client->getApiKey()]);
+    $resource = parent::restGet(['invoices', $invoiceId],
+                                ['api_key' => $this->client->getApiKey()]);
     if (!is_a($resource, Invoice::class))
     {
       throw new ClubCollectApiException('Expected an Invoice object, got a %s', get_class($resource));
@@ -274,7 +274,7 @@ class InvoiceEndpoint extends Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function getResourceObject(array $response): BaseResource
+  protected function createResourceObject(array $response): BaseResource
   {
     return new Invoice($this->client, $response);
   }

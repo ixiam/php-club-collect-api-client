@@ -67,7 +67,7 @@ class ImportEndpoint extends Endpoint
   public function fetch(string $importId): Import
   {
     /** @var Import $resource */
-    $resource = parent::restRead(['imports', $importId], ['api_key' => $this->client->getApiKey()]);
+    $resource = parent::restGet(['imports', $importId], ['api_key' => $this->client->getApiKey()]);
     if (!is_a($resource, Import::class))
     {
       throw new ClubCollectApiException('Expected an Import object, got a %s', get_class($resource));
@@ -89,10 +89,10 @@ class ImportEndpoint extends Endpoint
    */
   public function fetchAll(?int $from = null, ?int $to = null): array
   {
-    return parent::restList($from,
-                            $to,
-                            ['companies', $this->client->getCompanyId(), 'imports'],
-                            ['api_key' => $this->client->getApiKey()]);
+    return parent::restGetPages($from,
+                                $to,
+                                ['companies', $this->client->getCompanyId(), 'imports'],
+                                ['api_key' => $this->client->getApiKey()]);
   }
 
   //--------------------------------------------------------------------------------------------------------------------
@@ -155,7 +155,7 @@ class ImportEndpoint extends Endpoint
    *
    * @throws ClubCollectApiException
    */
-  protected function getResourceObject(array $response): BaseResource
+  protected function createResourceObject(array $response): BaseResource
   {
     return new Import($this->client, $response);
   }
