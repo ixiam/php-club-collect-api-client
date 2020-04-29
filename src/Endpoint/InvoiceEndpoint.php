@@ -62,7 +62,6 @@ class InvoiceEndpoint extends Endpoint
     foreach ($invoiceLines as $invoiceLine)
     {
       $ret[] = ['invoice_line_id' => $invoiceLine['invoice_line_id'] ?? null,
-                'type'            => $invoiceLine['type'] ?? null,
                 'amount_cents'    => $invoiceLine['amount_cents'],
                 'description'     => $invoiceLine['description'],
                 'date'            => $invoiceLine['date'] ?? date('c')];
