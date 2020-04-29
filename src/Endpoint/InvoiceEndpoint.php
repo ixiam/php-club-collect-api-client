@@ -15,6 +15,64 @@ class InvoiceEndpoint extends Endpoint
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
+   * Composes customer data part of the request body.
+   *
+   * @param array $customerName
+   * @param array $customerAddress
+   * @param array $customerEmail
+   * @param array $customerPhone
+   *
+   * @return array
+   */
+  private static function composeCustomer(array $customerName,
+                                          array $customerAddress,
+                                          array $customerEmail,
+                                          array $customerPhone): array
+  {
+    return ['name'    => ['prefix'       => $customerName['prefix'] ?? null,
+                          'first_name'   => $customerName['first_name'] ?? null,
+                          'infix'        => $customerName['infix'] ?? null,
+                          'last_name'    => $customerName['last_name'] ?? null,
+                          'organization' => $customerName['organization'] ?? null],
+            'address' => ['address1'     => $customerAddress['address1'] ?? null,
+                          'address2'     => $customerAddress['address2'] ?? null,
+                          'locality'     => $customerAddress['locality'] ?? null,
+                          'house_number' => Cast::toOptString($customerAddress['house_number'] ?? null),
+                          'state'        => $customerAddress['state'] ?? null,
+                          'zipcode'      => $customerAddress['zip_code'] ?? null,
+                          'city'         => $customerAddress['city'] ?? null,
+                          'country_code' => $customerAddress['country_code'] ?? null],
+            'email'   => ['email_address' => $customerEmail['email_address'] ?? null],
+            'phone'   => ['phone_number' => $customerPhone['phone_number'] ?? null,
+                          'country_code' => $customerPhone['country_code'] ?? null]];
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
+   * Composes the invoice lines part of the request body.
+   *
+   * @param array[] $invoiceLines The data of the invoice lines.
+   *
+   * @return array[]
+   */
+  private static function composeInvoiceLines(array $invoiceLines): array
+  {
+    $ret = [];
+
+    foreach ($invoiceLines as $invoiceLine)
+    {
+      $ret[] = ['invoice_line_id' => $invoiceLine['invoice_line_id'] ?? null,
+                'type'            => $invoiceLine['type'] ?? null,
+                'amount_cents'    => $invoiceLine['amount_cents'],
+                'description'     => $invoiceLine['description'],
+                'date'            => $invoiceLine['date'] ?? date('c')];
+    }
+
+    return $ret;
+  }
+
+  //--------------------------------------------------------------------------------------------------------------------
+  /**
    * Creates an invoice.
    *
    * @param string      $importId         ID of Import to which the Invoice should belong.
@@ -63,23 +121,11 @@ class InvoiceEndpoint extends Endpoint
        'federation_membership_number' => Cast::toOptString($federationMembershipNumber),
        'club_membership_number'       => Cast::toOptString($clubMembershipNumber),
        'locale'                       => $locale,
-       'customer'                     => ['name'    => ['prefix'       => $customerName['prefix'] ?? null,
-                                                        'first_name'   => $customerName['first_name'] ?? null,
-                                                        'infix'        => $customerName['infix'] ?? null,
-                                                        'last_name'    => $customerName['last_name'] ?? null,
-                                                        'organization' => $customerName['organization'] ?? null],
-                                          'address' => ['address1'     => $customerAddress['address1'] ?? null,
-                                                        'address2'     => $customerAddress['address2'] ?? null,
-                                                        'locality'     => $customerAddress['locality'] ?? null,
-                                                        'house_number' => Cast::toOptString($customerAddress['house_number'] ?? null),
-                                                        'state'        => $customerAddress['state'] ?? null,
-                                                        'zipcode'      => $customerAddress['zip_code'] ?? null,
-                                                        'city'         => $customerAddress['city'] ?? null,
-                                                        'country_code' => $customerAddress['country_code'] ?? null],
-                                          'email'   => ['email_address' => $customerEmail['email_address'] ?? null],
-                                          'phone'   => ['phone_number' => $customerPhone['phone_number'] ?? null,
-                                                        'country_code' => $customerPhone['country_code'] ?? null]],
-       'invoice_lines'                => $this->composeInvoiceLines($invoiceLines),
+       'customer'                     => self::composeCustomer($customerName,
+                                                               $customerAddress,
+                                                               $customerEmail,
+                                                               $customerPhone),
+       'invoice_lines'                => self::composeInvoiceLines($invoiceLines),
        'amount_total_cents'           => $amountTotalCents]);
     if (!is_a($resource, Invoice::class))
     {
@@ -111,7 +157,7 @@ class InvoiceEndpoint extends Endpoint
     $resource = parent::restPost(['invoices', $invoiceId, 'credit'],
                                  ['api_key' => $this->client->getApiKey()],
                                  ['external_invoice_number' => $externalInvoiceNumber,
-                                  'invoice_lines'           => $this->composeInvoiceLines($invoiceLines),
+                                  'invoice_lines'           => self::composeInvoiceLines($invoiceLines),
                                   'amount_total_cents'      => $amountTotalCents]);
 
     if (!is_a($resource, Invoice::class))
@@ -195,7 +241,6 @@ class InvoiceEndpoint extends Endpoint
 
     return $resource;
   }
-
   //--------------------------------------------------------------------------------------------------------------------
   /**
    * Updates an invoice.
@@ -240,22 +285,10 @@ class InvoiceEndpoint extends Endpoint
        'federation_membership_number' => Cast::toOptString($federationMembershipNumber),
        'club_membership_number'       => Cast::toOptString($clubMembershipNumber),
        'locale'                       => $locale,
-       'customer'                     => ['name'    => ['prefix'       => $customerName['prefix'] ?? null,
-                                                        'first_name'   => $customerName['first_name'] ?? null,
-                                                        'infix'        => $customerName['infix'] ?? null,
-                                                        'last_name'    => $customerName['last_name'] ?? null,
-                                                        'organization' => $customerName['organization'] ?? null],
-                                          'address' => ['address1'     => $customerAddress['address1'] ?? null,
-                                                        'address2'     => $customerAddress['address2'] ?? null,
-                                                        'locality'     => $customerAddress['locality'] ?? null,
-                                                        'house_number' => Cast::toOptString($customerAddress['house_number'] ?? null),
-                                                        'state'        => $customerAddress['state'] ?? null,
-                                                        'zipcode'      => $customerAddress['zip_code'] ?? null,
-                                                        'city'         => $customerAddress['city'] ?? null,
-                                                        'country_code' => $customerAddress['country_code'] ?? null],
-                                          'email'   => ['email_address' => $customerEmail['email_address'] ?? null],
-                                          'phone'   => ['phone_number' => $customerPhone['phone_number'] ?? null,
-                                                        'country_code' => $customerPhone['country_code'] ?? null]]]);
+       'customer'                     => self::composeCustomer($customerName,
+                                                               $customerAddress,
+                                                               $customerEmail,
+                                                               $customerPhone)]);
     if (!is_a($resource, Invoice::class))
     {
       throw new ClubCollectApiException('Expected an Invoice object, got a %s', get_class($resource));
@@ -277,30 +310,6 @@ class InvoiceEndpoint extends Endpoint
   protected function createResourceObject(array $response): BaseResource
   {
     return new Invoice($this->client, $response);
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
-   * Composes the invoice lines part of the request body.
-   *
-   * @param array[] $invoiceLines The data of the invoice lines.
-   *
-   * @return array[]
-   */
-  private function composeInvoiceLines(array $invoiceLines): array
-  {
-    $ret = [];
-
-    foreach ($invoiceLines as $invoiceLine)
-    {
-      $ret[] = ['invoice_line_id' => $invoiceLine['invoice_line_id'] ?? null,
-                'type'            => $invoiceLine['type'] ?? null,
-                'amount_cents'    => $invoiceLine['amount_cents'],
-                'description'     => $invoiceLine['description'],
-                'date'            => $invoiceLine['date'] ?? date('c')];
-    }
-
-    return $ret;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
