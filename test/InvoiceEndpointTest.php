@@ -14,55 +14,6 @@ class InvoiceEndpointTest extends TestCase
 {
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Test CRUD an Invoice.
-   *
-   * @throws \Exception
-   */
-  public function testCredit(): void
-  {
-    $apiKey    = trim(file_get_contents(__DIR__.'/../api-key.txt'));
-    $companyId = trim(file_get_contents(__DIR__.'/../company-id.txt'));
-
-    $title  = bin2hex(random_bytes(16));
-    $api    = new ClubCollectApiClient('https://sandbox.clubcollect.com/api', $apiKey, $companyId);
-    $import = $api->import->create($title);
-
-    $number = bin2hex(random_bytes(5));
-
-    // Create.
-    $invoice1 = $api->invoice->create($import->importId,
-                                      $number,
-                                      null,
-                                      null,
-                                      null,
-                                      null,
-                                      'NL',
-                                      ['first_name' => 'Jane',
-                                       'last_name'  => 'Doe'],
-                                      ['address1'     => 'Other Street',
-                                       'house_number' => '2',
-                                       'zip-code'     => '2000',
-                                       'city'         => 'A Not So Big One',
-                                       'country_code' => 'BE'],
-                                      ['email_address' => 'noreply@setbased.nl'],
-                                      ['phone_number' => '+32-4-72345678',
-                                       'country_code' => 'BE'],
-                                      [['amount_cents' => 5500,
-                                        'description'  => 'Contribution']],
-                                      5500);
-
-    // Credit.
-//    $invoice2 = $api->invoice->credit($invoice1->invoiceId,
-//                                      $number,
-//                                      [['amount_cents' => -500,
-//                                        'description'  => 'Contribution']],
-//                                      5000);
-    // self::assertSame(5000, $invoice2->amountTotalCents);
-    // XXX Does work yet.
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Test credit and retracts an Invoice.
    *
    * @throws \Exception

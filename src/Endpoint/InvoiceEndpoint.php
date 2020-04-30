@@ -136,39 +136,6 @@ class InvoiceEndpoint extends Endpoint
 
   //--------------------------------------------------------------------------------------------------------------------
   /**
-   * Credits an invoice.
-   *
-   * @param string  $invoiceId Invoice ID for the Invoice to be credited.
-   * @param string  $externalInvoiceNumber
-   * @param array[] $invoiceLines
-   * @param int     $amountTotalCents
-   *
-   * @return Invoice
-   *
-   * @throws ClubCollectApiException
-   */
-  public function credit(string $invoiceId,
-                         string $externalInvoiceNumber,
-                         array $invoiceLines,
-                         int $amountTotalCents): Invoice
-  {
-    /** @var Invoice $resource */
-    $resource = parent::restPost(['invoices', $invoiceId, 'credit'],
-                                 ['api_key' => $this->client->getApiKey()],
-                                 ['external_invoice_number' => $externalInvoiceNumber,
-                                  'invoice_lines'           => self::composeInvoiceLines($invoiceLines),
-                                  'amount_total_cents'      => $amountTotalCents]);
-
-    if (!is_a($resource, Invoice::class))
-    {
-      throw new ClubCollectApiException('Expected an Invoice object, got a %s', get_class($resource));
-    }
-
-    return $resource;
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  /**
    * Credits and retracts an invoice.
    *
    * @param string      $invoiceId Invoice ID for the Invoice to be credited.
