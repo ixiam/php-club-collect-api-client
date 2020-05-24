@@ -1,8 +1,6 @@
 build:
   nodes:
     tests:
-      before:
       override:
-        -
-          command: 'true'
+        - command: 'true'
 
