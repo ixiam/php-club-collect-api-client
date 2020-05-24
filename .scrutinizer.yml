@@ -1,6 +1,5 @@
 build:
-  nodes:
-    tests:
-      override:
-        - command: 'true'
-
+  tests:
+    override:
+      -
+        command: 'true'
