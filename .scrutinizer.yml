@@ -1,3 +1,8 @@
 build:
   nodes:
-    tests: false
+    tests:
+      before:
+      override:
+        -
+          command: 'true'
+
