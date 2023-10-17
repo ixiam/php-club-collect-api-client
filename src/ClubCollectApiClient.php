@@ -201,8 +201,11 @@ class ClubCollectApiClient
    */
   public function performHttpCallToFullUrl(string $httpMethod, string $url, ?string $httpBody = null): ?array
   {
+    // Set User-Agent header to avoid Sucuri Firewall issue with GuzzleHttp
+    // ref: https://www.liquidweb.com/kb/guzzle-securi-fix-403-errors/
     $headers = ['Accept'       => 'application/json',
-                'Content-Type' => 'application/json'];
+                'Content-Type' => 'application/json',
+                'User-Agent'   => 'curl/7.65.3'];
     $request = new Request($httpMethod, $url, $headers, $httpBody);
 
     try
