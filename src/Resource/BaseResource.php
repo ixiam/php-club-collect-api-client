@@ -35,9 +35,12 @@ abstract class BaseResource
    *
    * @return array
    */
-  public function __toArray()
-  {
-    return get_object_vars($this);
+  public function toArray() {
+    $array = json_decode(json_encode($this), TRUE);
+    if (isset($array['client'])) {
+      unset($array['client']);
+    }
+    return $array;
   }
 
   //--------------------------------------------------------------------------------------------------------------------
