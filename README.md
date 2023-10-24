@@ -1,5 +1,7 @@
 # A PHP ClubCollect API Client
 
+This is a forked repo from original https://github.com/SetBased/php-club-collect-api-client
+
 <table>
 <thead>
 <tr>
